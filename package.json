@@ -1,0 +1,26 @@
+{
+  "name": "gomoku",
+  "version": "1.0.0",
+  "description": "Backend for gomoku online game",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imatheussm/gomoku-back.git"
+  },
+  "keywords": [
+    "gomoku"
+  ],
+  "author": "ygarasab",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imatheussm/gomoku-back/issues"
+  },
+  "homepage": "https://github.com/imatheussm/gomoku-back#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^4.2.0"
+  }
+}
