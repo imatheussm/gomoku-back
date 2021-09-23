@@ -6,11 +6,10 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
-      origin: 'null',
+      origin: '*',
       methods: ["GET", "POST"]
     }
   });
-
 io.on("connection", (socket) => {
     console.log('Someone Connected')
 });
