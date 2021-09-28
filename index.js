@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
         if(!(room in rooms))
         {
             rooms[room] = 1
-            socket.emit('joined', {player:0})
+            socket.emit('joined', {player:-1})
         }
         else if(rooms[room])
         {
