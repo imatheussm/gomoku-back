@@ -31,6 +31,7 @@ io.on("connection", (socket) => {
         else if(rooms[room])
         {
             rooms[room] = 0
+            io.to(room).emit('ready')
             socket.emit('joined', {player:1})
         }
         else
