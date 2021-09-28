@@ -37,8 +37,8 @@ io.on("connection", (socket) => {
             socket.emit('full')
     })
     socket.on('play', data => {
-        console.log(`[ ${new Date().toLocaleString()} ] A play was sent at room ${socket.rooms[0]} by player ${data.player}`)
-        socket.rooms.forEach(room => io.to(room).emit('play', data))
+        console.log(`[ ${new Date().toLocaleString()} ] A play was sent at room ${data.room} by player ${data.player}`)
+        io.to(data.room).emit('play', data)
     })
 });
 
