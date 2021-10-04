@@ -1,14 +1,21 @@
 const express = require("express");
-const { createServer } = require("http");
+const { createServer } = require("https");
+
 const { Server } = require("socket.io");
 const fs = require('fs')
 const util = require('util')
 
-let log_file = fs.createWriteStream('/log/gomoku.log', {flags : 'w'});
+let log_file = fs.createWriteStream('/log/gomokuws.log', {flags : 'w'});
 console.log = d =>  log_file.write(util.format(d) + '\n')
 
+const options = {
+  key: fs.readFileSync("/etc/letsencrypt/live/gomokuws.ygarasab.com/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/gomokuws.ygarasab.com/fullchain.pem")
+};
+
 const app = express();
-const httpServer = createServer(app);
+app.get('/', (_, r) =>r.send( "hello world"))
+const httpServer = createServer(options, app);
 
 let rooms = {}
 
@@ -44,4 +51,5 @@ io.on("connection", (socket) => {
 });
 
 console.log(`[ ${new Date().toLocaleString()} ] Starting`)
+
 httpServer.listen(3002);
