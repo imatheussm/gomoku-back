@@ -27,26 +27,42 @@ const io = new Server(httpServer, {
   });
 io.on("connection", (socket) => {
     console.log(`[ ${new Date().toLocaleString()} ] Someone connected`)
-    socket.on('join', room => {
+    socket
+      .on('join', room => {
         console.log(`[ ${new Date().toLocaleString()} ] Someone is trying to join room ${room}`)
-        socket.join(room)
+     
         if(!(room in rooms))
         {
+            socket.join(room);
             rooms[room] = 1
             socket.emit('joined', {player:-1})
         }
         else if(rooms[room])
         {
+	    socket.join(room)
             rooms[room] = 0
             io.to(room).emit('ready')
             socket.emit('joined', {player:1})
         }
         else
             socket.emit('full')
-    })
-    socket.on('play', data => {
+     })
+      .on('play', data => {
         console.log(`[ ${new Date().toLocaleString()} ] A play was sent at room ${data.room} by player ${data.player}`)
-        io.to(data.room).emit('play', data)
+	        io.to(data.room).emit('play', data)
+    })
+      .on('disconnect', data => {
+	console.log(`[ ${new Date().toLocaleString()} ] A player disconnected`);
+    	for(room in rooms){
+		if(io.sockets.adapter.rooms.get(room) === undefined) delete rooms[room]
+		else if(rooms[room] === 0 && io.sockets.adapter.rooms.get(room).size === 1){
+			let clients = io.sockets.adapter.rooms.get(room)
+			io.to(room).emit('left')
+			for(let client of clients) io.sockets.sockets.get(client).leave(room)
+			delete rooms[room]
+			console.log(`[ ${new Date().toLocaleString()} ] Room ${room} deleted`);
+		}
+	}
     })
 });
 
